@@ -1,0 +1,2004 @@
+[
+  {
+    "id": "undefined_function",
+    "languages": ["js", "ts"],
+    "pattern": "TypeError:\\s.* is not a function",
+    "severity": "high",
+    "description": "Function is called but not defined; may occur due to missing import, wrong binding, or incorrect scope.",
+    "docsKey": "js_undefined_function",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["forgot import", "typo in function name", "scope issues"],
+      "occurrence_pattern": "mostly runtime during invocation"
+    }
+  },
+  {
+    "id": "null_reference",
+    "languages": ["js", "ts", "python"],
+    "pattern": "(Cannot read property .* of null|AttributeError: 'NoneType'.*)",
+    "severity": "high",
+    "description": "Attempting to access a property or method of a null or None object. Often indicates uninitialized variable or failed API response.",
+    "docsKey": "js_null_reference",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["uninitialized variable", "failed API call", "improper async handling"],
+      "occurrence_pattern": "runtime access after assignment or fetch"
+    }
+  },
+  {
+    "id": "db_connection_error",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Connection refused|Database connection failed|Could not connect to server)",
+    "severity": "critical",
+    "description": "Database is unreachable or credentials are invalid; may result in failed transactions or app crash.",
+    "docsKey": "db_connection_error",
+    "meta": {
+      "category": "infrastructure",
+      "common_causes": ["wrong credentials", "DB server down", "network firewall", "timeout"],
+      "occurrence_pattern": "startup phase, query execution"
+    }
+  },
+  {
+    "id": "api_rate_limit",
+    "languages": ["js", "python", "go", "java"],
+    "pattern": "(429 Too Many Requests|RateLimitExceeded)",
+    "severity": "medium",
+    "description": "API request limit exceeded; implement retry/backoff logic or check API quota.",
+    "docsKey": "api_rate_limit",
+    "meta": {
+      "category": "network",
+      "common_causes": ["high request volume", "no backoff/retry", "shared API key usage"],
+      "occurrence_pattern": "during API calls under load"
+    }
+  },
+  {
+    "id": "promise_rejection_unhandled",
+    "languages": ["js", "ts"],
+    "pattern": "(UnhandledPromiseRejectionWarning|unhandled promise rejection)",
+    "severity": "high",
+    "description": "Promise rejection not caught. Could lead to silent failures in async code.",
+    "docsKey": "js_unhandled_promise",
+    "meta": {
+      "category": "async",
+      "common_causes": ["forgot .catch()", "async function throws", "external API rejection"],
+      "occurrence_pattern": "runtime async execution"
+    }
+  },
+  {
+    "id": "memory_leak_detected",
+    "languages": ["js", "python", "go", "java"],
+    "pattern": "(heap out of memory|MemoryError|GC overhead limit exceeded)",
+    "severity": "critical",
+    "description": "Memory usage exceeds limits or garbage collection cannot reclaim memory; may cause process crash.",
+    "docsKey": "memory_leak_detected",
+    "meta": {
+      "category": "performance",
+      "common_causes": ["large data in memory", "circular references", "infinite loops storing objects"],
+      "occurrence_pattern": "long-running processes or heavy computation"
+    }
+  },
+  {
+    "id": "syntax_error",
+    "languages": ["js", "ts", "python", "java", "go", "ruby"],
+    "pattern": "(SyntaxError:|IndentationError:|unexpected token|illegal start of expression)",
+    "severity": "high",
+    "description": "Code contains invalid syntax; compiler/interpreter cannot parse code.",
+    "docsKey": "syntax_error_generic",
+    "meta": {
+      "category": "compile",
+      "common_causes": ["typo", "missing punctuation", "mismatched brackets", "wrong indentation"],
+      "occurrence_pattern": "compile time / interpreter load"
+    }
+  },
+  {
+    "id": "deprecated_api_usage",
+    "languages": ["js", "python", "java", "go"],
+    "pattern": "(deprecated|will be removed in future versions)",
+    "severity": "low",
+    "description": "Code uses deprecated API; should migrate to supported API to avoid future breakage.",
+    "docsKey": "deprecated_api_usage",
+    "meta": {
+      "category": "maintenance",
+      "common_causes": ["old library version", "legacy code", "ignored warnings"],
+      "occurrence_pattern": "runtime, compile time warning"
+    }
+  },
+  {
+    "id": "timeout_error",
+    "languages": ["js", "python", "go", "java"],
+    "pattern": "(TimeoutError|ETIMEDOUT|request timed out)",
+    "severity": "medium",
+    "description": "Operation exceeds maximum wait time; could be network or service related.",
+    "docsKey": "timeout_error",
+    "meta": {
+      "category": "network",
+      "common_causes": ["slow API", "network latency", "server overload"],
+      "occurrence_pattern": "async calls, network requests, DB queries"
+    }
+  },
+  {
+    "id": "ssl_certificate_error",
+    "languages": ["js", "python", "go", "java"],
+    "pattern": "(SSLHandshakeException|certificate verify failed|CERT_HAS_EXPIRED)",
+    "severity": "high",
+    "description": "Failed SSL/TLS handshake; may indicate expired, self-signed, or invalid certificate.",
+    "docsKey": "ssl_certificate_error",
+    "meta": {
+      "category": "security",
+      "common_causes": ["expired certificate", "untrusted CA", "wrong hostname", "self-signed certificate"],
+      "occurrence_pattern": "network HTTPS requests"
+    }
+  },
+  {
+    "id": "cross_origin_error",
+    "languages": ["js", "ts"],
+    "pattern": "(Access to fetch at .* from origin .* has been blocked by CORS policy)",
+    "severity": "medium",
+    "description": "Cross-Origin Resource Sharing blocked the request; adjust server headers or use proxy.",
+    "docsKey": "cors_error",
+    "meta": {
+      "category": "network",
+      "common_causes": ["frontend calls API directly", "CORS not enabled", "wrong origin headers"],
+      "occurrence_pattern": "browser runtime fetch/ajax calls"
+    }
+  },
+  {
+    "id": "type_mismatch",
+    "languages": ["python", "ts", "js", "go", "java"],
+    "pattern": "(TypeError:|Cannot convert .* to .*|incompatible types:)",
+    "severity": "high",
+    "description": "Variable type incompatible with operation; often due to implicit casting or wrong API usage.",
+    "docsKey": "type_mismatch_error",
+    "meta": {
+      "category": "compile/runtime",
+      "common_causes": ["wrong type passed to function", "invalid cast", "JSON deserialization mismatch"],
+      "occurrence_pattern": "compile or runtime, depending on language"
+    }
+  },
+  {
+    "id": "index_out_of_bounds",
+    "languages": ["python", "js", "ts", "java", "go"],
+    "pattern": "(IndexError: list index out of range|ArrayIndexOutOfBoundsException|slice index out of range)",
+    "severity": "high",
+    "description": "Accessing collection index outside its bounds; may indicate logic error or off-by-one bug.",
+    "docsKey": "index_out_of_bounds_error",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["wrong loop bounds", "empty array access", "negative index"],
+      "occurrence_pattern": "runtime during collection access"
+    }
+  },
+  {
+    "id": "circular_dependency",
+    "languages": ["js", "ts", "python", "go"],
+    "pattern": "(Maximum call stack size exceeded|RecursionError: maximum recursion depth exceeded)",
+    "severity": "critical",
+    "description": "Detected infinite loop due to circular imports or recursion. Could crash app if unchecked.",
+    "docsKey": "circular_dependency_error",
+    "meta": {
+      "category": "architecture",
+      "common_causes": ["mutual imports", "recursive function without base case", "dependency loop in modules"],
+      "occurrence_pattern": "runtime during module load or recursive calls"
+    }
+  },
+  {
+    "id": "json_parse_error",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(SyntaxError: Unexpected token|JSONDecodeError|invalid character .* in JSON)",
+    "severity": "high",
+    "description": "Invalid JSON payload; usually malformed or unexpected content from API, file, or user input.",
+    "docsKey": "json_parse_error",
+    "meta": {
+      "category": "data",
+      "common_causes": ["API returned HTML or text instead of JSON", "file corrupted", "manual edit with typo"],
+      "occurrence_pattern": "runtime during JSON.parse/load"
+    }
+  },
+  {
+    "id": "async_timeout",
+    "languages": ["js", "ts", "python", "go"],
+    "pattern": "(AsyncTimeoutError|asyncio\\.TimeoutError|Request timed out)",
+    "severity": "high",
+    "description": "Async operation exceeded its timeout limit; may indicate network slowness, deadlock, or blocked thread.",
+    "docsKey": "async_timeout_error",
+    "meta": {
+      "category": "async",
+      "common_causes": ["no retry/backoff logic", "slow API", "deadlock in async calls"],
+      "occurrence_pattern": "runtime during async tasks"
+    }
+  },
+  {
+    "id": "invalid_credentials",
+    "languages": ["js", "python", "go", "java"],
+    "pattern": "(Authentication failed|invalid credentials|Login failed)",
+    "severity": "critical",
+    "description": "Failed authentication; user or service credentials incorrect. Could block critical workflow.",
+    "docsKey": "invalid_credentials_error",
+    "meta": {
+      "category": "security",
+      "common_causes": ["typo in password/API key", "expired token", "revoked credentials"],
+      "occurrence_pattern": "runtime during login or API call"
+    }
+  },
+  {
+    "id": "file_not_found",
+    "languages": ["python", "js", "ts", "go", "java"],
+    "pattern": "(FileNotFoundError|ENOENT|cannot find file)",
+    "severity": "medium",
+    "description": "Required file or resource not found; may break program if not handled gracefully.",
+    "docsKey": "file_not_found_error",
+    "meta": {
+      "category": "filesystem",
+      "common_causes": ["wrong path", "file deleted", "misconfigured directory"],
+      "occurrence_pattern": "runtime during file open/read/write"
+    }
+  },
+  {
+    "id": "permission_denied",
+    "languages": ["python", "js", "ts", "go", "java"],
+    "pattern": "(PermissionError|EACCES|AccessDenied)",
+    "severity": "high",
+    "description": "Operation denied due to insufficient permissions; can happen on filesystem, DB, network, or API.",
+    "docsKey": "permission_denied_error",
+    "meta": {
+      "category": "security",
+      "common_causes": ["user lacks permission", "file/system protected", "API key insufficient scope"],
+      "occurrence_pattern": "runtime during resource access"
+    }
+  },
+  {
+    "id": "unreachable_code",
+    "languages": ["js", "ts", "python", "java", "go"],
+    "pattern": "(Unreachable code detected|code after return statement|dead code warning)",
+    "severity": "low",
+    "description": "Code block will never execute; may indicate logic error or outdated code.",
+    "docsKey": "unreachable_code_warning",
+    "meta": {
+      "category": "maintenance",
+      "common_causes": ["return/break before code", "legacy code not removed", "conditional logic error"],
+      "occurrence_pattern": "compile/runtime warning"
+    }
+  },
+  {
+    "id": "deprecated_function",
+    "languages": ["js", "ts", "python", "java", "go"],
+    "pattern": "(deprecated function|will be removed|obsolete)",
+    "severity": "medium",
+    "description": "Function or API is deprecated; upgrade to avoid future breakage.",
+    "docsKey": "deprecated_function_warning",
+    "meta": {
+      "category": "maintenance",
+      "common_causes": ["legacy code", "library update available", "ignored warning"],
+      "occurrence_pattern": "runtime/compile warnings"
+    }
+  },
+  {
+    "id": "index_key_error",
+    "languages": ["python", "js", "ts"],
+    "pattern": "(KeyError|undefined index|undefined property)",
+    "severity": "high",
+    "description": "Attempt to access dictionary or object key that does not exist; often logic bug.",
+    "docsKey": "index_key_error",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["typo in key", "missing data", "dynamic object mismatch"],
+      "occurrence_pattern": "runtime dictionary/object access"
+    }
+  },
+  {
+    "id": "csp_violation",
+    "languages": ["js", "ts"],
+    "pattern": "(Content Security Policy violation|Refused to load the script|unsafe-inline)",
+    "severity": "medium",
+    "description": "CSP blocked a resource or script; adjust policy headers or move inline scripts.",
+    "docsKey": "csp_violation_error",
+    "meta": {
+      "category": "security",
+      "common_causes": ["inline script blocked", "external script blocked", "policy too strict"],
+      "occurrence_pattern": "browser runtime"
+    }
+  },
+  {
+    "id": "circular_json",
+    "languages": ["js", "ts", "python", "go"],
+    "pattern": "(Converting circular structure to JSON|RecursionError: circular reference)",
+    "severity": "high",
+    "description": "JSON serialization fails due to circular references in object; may require custom serializer.",
+    "docsKey": "circular_json_error",
+    "meta": {
+      "category": "data",
+      "common_causes": ["object references itself", "nested circular objects", "wrong data model"],
+      "occurrence_pattern": "runtime during JSON.stringify/encode"
+    }
+  },
+  {
+    "id": "network_unreachable",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Network is unreachable|ENETUNREACH|No route to host)",
+    "severity": "critical",
+    "description": "Network connectivity issue detected; server or host cannot be reached.",
+    "docsKey": "network_unreachable_error",
+    "meta": {
+      "category": "network",
+      "common_causes": ["offline host", "firewall", "misconfigured routing", "VPN issues"],
+      "occurrence_pattern": "runtime during network calls"
+    }
+  },
+  {
+    "id": "invalid_regex",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(invalid regular expression|re.error|SyntaxError: invalid regular expression)",
+    "severity": "high",
+    "description": "Regex compilation failed; pattern syntax invalid.",
+    "docsKey": "invalid_regex_error",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["typo in pattern", "unsupported flags", "escaped incorrectly"],
+      "occurrence_pattern": "compile/runtime regex operations"
+    }
+  },
+  {
+    "id": "deadlock_detected",
+    "languages": ["python", "go", "java"],
+    "pattern": "(deadlock detected|thread blocked indefinitely|asyncio.deadlock)",
+    "severity": "critical",
+    "description": "Detected deadlock in multithreading/multiprocessing or async routines; process hangs.",
+    "docsKey": "deadlock_detected_error",
+    "meta": {
+      "category": "concurrency",
+      "common_causes": ["mutex mismanagement", "lock ordering issue", "await cycle in async code"],
+      "occurrence_pattern": "runtime during concurrent execution"
+    }
+  },
+  {
+    "id": "module_not_found",
+    "languages": ["python", "js", "ts", "go", "java"],
+    "pattern": "(ModuleNotFoundError|Cannot find module|import .* failed)",
+    "severity": "high",
+    "description": "Required module/package/library not found; check install or path.",
+    "docsKey": "module_not_found_error",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["module not installed", "wrong path", "typo in import"],
+      "occurrence_pattern": "runtime module import/load"
+    }
+  },
+  {
+    "id": "stack_overflow",
+    "languages": ["js", "ts", "python", "java", "go"],
+    "pattern": "(RangeError: Maximum call stack size exceeded|StackOverflowError)",
+    "severity": "critical",
+    "description": "Infinite recursion or excessively deep call chain; process crashes if unhandled.",
+    "docsKey": "stack_overflow_error",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["recursive function without base case", "deep object traversal"],
+      "occurrence_pattern": "runtime during recursive calls"
+    }
+  },
+  {
+    "id": "ssl_handshake_failed",
+    "languages": ["js", "python", "go", "java"],
+    "pattern": "(SSLHandshakeException|certificate verify failed|wrong version number)",
+    "severity": "high",
+    "description": "TLS/SSL handshake failed; may indicate invalid certificate, protocol mismatch, or MITM attempt.",
+    "docsKey": "ssl_handshake_error",
+    "meta": {
+      "category": "security",
+      "common_causes": ["expired certificate", "incompatible TLS version", "self-signed certificate", "firewall interception"],
+      "occurrence_pattern": "network TLS connection"
+    }
+  },
+  {
+    "id": "http_500_error",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(500 Internal Server Error|HttpException: 500)",
+    "severity": "critical",
+    "description": "Server encountered unexpected condition; may require investigation in backend/service.",
+    "docsKey": "http_500_error",
+    "meta": {
+      "category": "network/server",
+      "common_causes": ["unhandled exception", "DB failure", "null reference", "logic bug"],
+      "occurrence_pattern": "runtime API response"
+    }
+  },
+  {
+    "id": "http_403_error",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(403 Forbidden|AccessDenied)",
+    "severity": "medium",
+    "description": "Client forbidden from accessing resource; may need permissions review or API key check.",
+    "docsKey": "http_403_error",
+    "meta": {
+      "category": "network/security",
+      "common_causes": ["insufficient permissions", "IP blocked", "CORS policy restriction"],
+      "occurrence_pattern": "runtime during network/API calls"
+    }
+  },
+  {
+    "id": "http_404_error",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(404 Not Found|ResourceNotFound)",
+    "severity": "low",
+    "description": "Requested resource not found; often caused by wrong URL/path or deleted resource.",
+    "docsKey": "http_404_error",
+    "meta": {
+      "category": "network",
+      "common_causes": ["wrong URL/path", "resource removed", "typo in endpoint"],
+      "occurrence_pattern": "runtime during network/API calls"
+    }
+  },
+  {
+    "id": "db_timeout",
+    "languages": ["python", "js", "ts", "go", "java"],
+    "pattern": "(Database timeout|Query timed out|OperationalError: timeout expired)",
+    "severity": "high",
+    "description": "Database query exceeded allowed time; may indicate performance issue or deadlock.",
+    "docsKey": "db_timeout_error",
+    "meta": {
+      "category": "database",
+      "common_causes": ["long-running query", "lock contention", "network latency"],
+      "occurrence_pattern": "runtime during DB operations"
+    }
+  },
+  {
+    "id": "db_integrity_error",
+    "languages": ["python", "js", "ts", "go", "java"],
+    "pattern": "(IntegrityError|constraint violation|unique constraint failed)",
+    "severity": "critical",
+    "description": "Database integrity constraint violated; check data consistency or migration issues.",
+    "docsKey": "db_integrity_error",
+    "meta": {
+      "category": "database",
+      "common_causes": ["duplicate insert", "foreign key violation", "schema mismatch"],
+      "occurrence_pattern": "runtime during DB insert/update"
+    }
+  },
+  {
+    "id": "unhandled_exception",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Unhandled exception|Uncaught exception|Exception not caught)",
+    "severity": "critical",
+    "description": "Generic unhandled exception; may crash app or leave inconsistent state.",
+    "docsKey": "unhandled_exception",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["missing try/catch", "unexpected input", "external library failure"],
+      "occurrence_pattern": "runtime"
+    }
+  },
+  {
+    "id": "deprecated_library",
+    "languages": ["js", "ts", "python", "java", "go"],
+    "pattern": "(deprecated library|library will be removed|obsolete module)",
+    "severity": "low",
+    "description": "Code depends on deprecated library; consider upgrade or replacement.",
+    "docsKey": "deprecated_library_warning",
+    "meta": {
+      "category": "maintenance",
+      "common_causes": ["old dependency", "ignored warnings", "legacy project"],
+      "occurrence_pattern": "runtime/compile time"
+    }
+  },
+  {
+    "id": "yaml_parse_error",
+    "languages": ["python", "js", "ts", "go", "java"],
+    "pattern": "(yaml\\.scanner\\.ScannerError|YAMLError|cannot parse YAML)",
+    "severity": "high",
+    "description": "Failed to parse YAML content; usually malformed, wrong indentation, or unsupported type.",
+    "docsKey": "yaml_parse_error",
+    "meta": {
+      "category": "data",
+      "common_causes": ["wrong indentation", "invalid characters", "unexpected key type"],
+      "occurrence_pattern": "runtime during YAML.load/parse"
+    }
+  },
+  {
+    "id": "certificate_expired",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(CERT_HAS_EXPIRED|certificate expired|SSL routines:tls_process_server_certificate)",
+    "severity": "high",
+    "description": "TLS/SSL certificate expired; update certificate or adjust system trust store.",
+    "docsKey": "certificate_expired_error",
+    "meta": {
+      "category": "security",
+      "common_causes": ["certificate not renewed", "system date incorrect", "expired CA"],
+      "occurrence_pattern": "network TLS connection"
+    }
+  },
+  {
+    "id": "api_invalid_response",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Unexpected API response|Invalid response format|malformed JSON)",
+    "severity": "high",
+    "description": "API returned invalid or unexpected data; may break parsing logic.",
+    "docsKey": "api_invalid_response_error",
+    "meta": {
+      "category": "network/api",
+      "common_causes": ["server bug", "deprecated endpoint", "proxy interference"],
+      "occurrence_pattern": "runtime API calls"
+    }
+  },
+  {
+    "id": "cross_site_scripting",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(XSS detected|cross-site scripting|script injection)",
+    "severity": "critical",
+    "description": "Potential cross-site scripting vulnerability detected; user input improperly sanitized.",
+    "docsKey": "xss_error",
+    "meta": {
+      "category": "security",
+      "common_causes": ["unsanitized input", "dynamic HTML rendering", "legacy code"],
+      "occurrence_pattern": "runtime frontend/backend"
+    }
+  },
+  {
+    "id": "sql_injection_attempt",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(SQL syntax error|database error|SQL injection attempt detected)",
+    "severity": "critical",
+    "description": "Potential SQL injection attempt; validate input and use parameterized queries.",
+    "docsKey": "sql_injection_error",
+    "meta": {
+      "category": "security/database",
+      "common_causes": ["unsanitized input", "dynamic query building"],
+      "occurrence_pattern": "runtime during DB query execution"
+    }
+  },
+  {
+    "id": "object_disposed",
+    "languages": ["csharp", "java", "go", "python"],
+    "pattern": "(ObjectDisposedException|use of disposed object)",
+    "severity": "high",
+    "description": "Operation on an object that has already been disposed or garbage collected.",
+    "docsKey": "object_disposed_error",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["disposed object accessed", "closed file/stream/socket"],
+      "occurrence_pattern": "runtime after object lifecycle ended"
+    }
+  },
+  {
+    "id": "unsupported_operation",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(UnsupportedOperationException|Operation not supported|TypeError: unsupported operand)",
+    "severity": "medium",
+    "description": "Operation is invalid for the object type; check method or operand compatibility.",
+    "docsKey": "unsupported_operation_error",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["wrong type", "method not implemented", "immutable object modification"],
+      "occurrence_pattern": "runtime during method invocation or operator usage"
+    }
+  },
+  {
+    "id": "division_by_zero",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(ZeroDivisionError|division by zero|DivideByZeroException)",
+    "severity": "critical",
+    "description": "Attempt to divide a number by zero; may crash process or yield infinity.",
+    "docsKey": "division_by_zero_error",
+    "meta": {
+      "category": "runtime/math",
+      "common_causes": ["wrong calculation", "dynamic input not validated"],
+      "occurrence_pattern": "runtime math operations"
+    }
+  },
+  {
+    "id": "json_schema_validation",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(ValidationError|schema validation failed|invalid JSON schema)",
+    "severity": "high",
+    "description": "Data does not conform to expected JSON schema; may break processing pipelines.",
+    "docsKey": "json_schema_validation_error",
+    "meta": {
+      "category": "data",
+      "common_causes": ["wrong data format", "missing required fields", "type mismatch"],
+      "occurrence_pattern": "runtime during JSON validation"
+    }
+  },
+  {
+    "id": "circular_import_warning",
+    "languages": ["python", "js", "ts", "go"],
+    "pattern": "(ImportError: cannot import name|circular import detected)",
+    "severity": "high",
+    "description": "Detected circular import between modules; may cause partial import or runtime error.",
+    "docsKey": "circular_import_error",
+    "meta": {
+      "category": "architecture",
+      "common_causes": ["mutual module dependency", "wrong import order"],
+      "occurrence_pattern": "runtime module load"
+    }
+  },
+  {
+    "id": "unclosed_resource",
+    "languages": ["python", "java", "go", "js", "ts"],
+    "pattern": "(ResourceWarning: unclosed|Stream closed|File handle leak)",
+    "severity": "medium",
+    "description": "Resource (file, socket, DB connection) not properly closed; may cause leaks or lock issues.",
+    "docsKey": "unclosed_resource_error",
+    "meta": {
+      "category": "performance",
+      "common_causes": ["forgot close()", "exception prevented cleanup", "async leak"],
+      "occurrence_pattern": "runtime resource access"
+    }
+  },
+  {
+    "id": "encoding_error",
+    "languages": ["python", "js", "ts", "go", "java"],
+    "pattern": "(UnicodeEncodeError|UnicodeDecodeError|character encoding error)",
+    "severity": "medium",
+    "description": "Data cannot be encoded/decoded; often occurs with mismatched charsets.",
+    "docsKey": "encoding_error",
+    "meta": {
+      "category": "data",
+      "common_causes": ["wrong encoding specified", "binary data treated as string", "file encoding mismatch"],
+      "occurrence_pattern": "runtime during I/O"
+    }
+  },
+  {
+    "id": "promise_cycle_detected",
+    "languages": ["js", "ts"],
+    "pattern": "(Maximum call stack size exceeded|circular promise chain)",
+    "severity": "high",
+    "description": "Promises reference each other creating infinite async loop; causes stack overflow.",
+    "docsKey": "promise_cycle_error",
+    "meta": {
+      "category": "async",
+      "common_causes": ["mutual .then chains", "recursive async calls"],
+      "occurrence_pattern": "runtime async execution"
+    }
+  },
+  {
+    "id": "event_loop_blocked",
+    "languages": ["js", "ts", "python"],
+    "pattern": "(Event loop blocked|RuntimeWarning: coroutine never awaited)",
+    "severity": "critical",
+    "description": "Long synchronous operation blocking async loop; may freeze app or delay tasks.",
+    "docsKey": "event_loop_blocked_error",
+    "meta": {
+      "category": "async/performance",
+      "common_causes": ["blocking I/O", "CPU-intensive synchronous operation"],
+      "occurrence_pattern": "runtime async execution"
+    }
+  },
+  {
+    "id": "memory_corruption",
+    "languages": ["c", "c++", "go", "java"],
+    "pattern": "(Segmentation fault|memory corruption detected|invalid memory access)",
+    "severity": "critical",
+    "description": "Detected invalid memory access or corruption; may cause crash or undefined behavior.",
+    "docsKey": "memory_corruption_error",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["buffer overflow", "use after free", "dangling pointer"],
+      "occurrence_pattern": "runtime memory access"
+    }
+  },
+  {
+    "id": "dependency_version_mismatch",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Module version mismatch|Incompatible dependency version|VersionConflict)",
+    "severity": "high",
+    "description": "Installed dependency version does not match required version; may break runtime behavior.",
+    "docsKey": "dependency_version_mismatch_error",
+    "meta": {
+      "category": "maintenance",
+      "common_causes": ["library update", "inconsistent package.json/requirements.txt", "transitive dependencies"],
+      "occurrence_pattern": "runtime import/load"
+    }
+  },
+  {
+    "id": "circular_reference_in_object",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Converting circular structure to JSON|circular reference detected)",
+    "severity": "high",
+    "description": "Object contains circular references preventing serialization; requires custom handling.",
+    "docsKey": "circular_reference_object_error",
+    "meta": {
+      "category": "data",
+      "common_causes": ["nested self-reference", "bi-directional relationships"],
+      "occurrence_pattern": "runtime during serialization"
+    }
+  },
+  {
+    "id": "too_many_open_files",
+    "languages": ["python", "go", "java", "js", "ts"],
+    "pattern": "(Too many open files|EMFILE|file descriptor limit exceeded)",
+    "severity": "critical",
+    "description": "Process exceeded OS file descriptor limit; may crash or fail I/O operations.",
+    "docsKey": "too_many_open_files_error",
+    "meta": {
+      "category": "performance",
+      "common_causes": ["unclosed files/sockets", "high concurrency without pooling"],
+      "occurrence_pattern": "runtime during I/O operations"
+    }
+  },
+  {
+    "id": "race_condition_detected",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Race condition detected|inconsistent state due to concurrency|data corruption)",
+    "severity": "critical",
+    "description": "Concurrent access to shared resource leads to unexpected behavior or data corruption.",
+    "docsKey": "race_condition_error",
+    "meta": {
+      "category": "concurrency",
+      "common_causes": ["unsynchronized threads/async calls", "shared mutable state", "missing locks/mutexes"],
+      "occurrence_pattern": "runtime concurrent execution"
+    }
+  },
+  {
+    "id": "deprecated_syntax",
+    "languages": ["js", "ts", "python", "java", "go", "ruby"],
+    "pattern": "(deprecated syntax|will be removed|SyntaxWarning)",
+    "severity": "low",
+    "description": "Using language syntax deprecated in current version; may break in future updates.",
+    "docsKey": "deprecated_syntax_warning",
+    "meta": {
+      "category": "maintenance",
+      "common_causes": ["old tutorial/sample code", "ignored warnings", "legacy project"],
+      "occurrence_pattern": "compile/runtime warnings"
+    }
+  },
+  {
+    "id": "csp_inline_script_blocked",
+    "languages": ["js", "ts"],
+    "pattern": "(Refused to execute inline script|Content Security Policy)",
+    "severity": "medium",
+    "description": "Inline script blocked by CSP; move scripts to external files or adjust CSP headers.",
+    "docsKey": "csp_inline_script_error",
+    "meta": {
+      "category": "security",
+      "common_causes": ["inline scripts in HTML", "CSP too strict"],
+      "occurrence_pattern": "browser runtime"
+    }
+  },
+  {
+    "id": "http_redirect_loop",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Too many redirects|redirect loop detected|ERR_TOO_MANY_REDIRECTS)",
+    "severity": "medium",
+    "description": "HTTP request redirected repeatedly; may indicate misconfigured routing or infinite redirect chain.",
+    "docsKey": "http_redirect_loop_error",
+    "meta": {
+      "category": "network",
+      "common_causes": ["circular redirect rules", "proxy misconfiguration"],
+      "occurrence_pattern": "runtime during HTTP request"
+    }
+  },
+  {
+    "id": "dns_resolution_failed",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(DNS lookup failed|getaddrinfo failed|NXDOMAIN)",
+    "severity": "high",
+    "description": "DNS resolution for hostname failed; may indicate network or configuration issue.",
+    "docsKey": "dns_resolution_failed_error",
+    "meta": {
+      "category": "network",
+      "common_causes": ["hostname typo", "network down", "DNS server unreachable"],
+      "occurrence_pattern": "runtime during network calls"
+    }
+  },
+  {
+    "id": "deprecated_api_parameter",
+    "languages": ["js", "ts", "python", "java", "go"],
+    "pattern": "(deprecated parameter|will be removed|unused argument warning)",
+    "severity": "low",
+    "description": "API parameter used is deprecated; update calls to supported parameters.",
+    "docsKey": "deprecated_api_parameter_warning",
+    "meta": {
+      "category": "maintenance",
+      "common_causes": ["old SDK version", "legacy API call", "ignored warnings"],
+      "occurrence_pattern": "runtime/compile time"
+    }
+  },
+  {
+    "id": "buffer_overflow_detected",
+    "languages": ["c", "c++", "go"],
+    "pattern": "(buffer overflow detected|stack smashing detected|heap corruption)",
+    "severity": "critical",
+    "description": "Detected buffer overflow; may lead to crash, memory corruption, or security vulnerability.",
+    "docsKey": "buffer_overflow_error",
+    "meta": {
+      "category": "security/runtime",
+      "common_causes": ["writing past array boundary", "unsafe memory operations"],
+      "occurrence_pattern": "runtime memory access"
+    }
+  },
+  {
+    "id": "missing_dependency_runtime",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Cannot find module|ImportError|ModuleNotFoundError)",
+    "severity": "high",
+    "description": "Required library/dependency missing during runtime; may crash app.",
+    "docsKey": "missing_dependency_error",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["dependency not installed", "package path mismatch", "dynamic import fail"],
+      "occurrence_pattern": "runtime module load"
+    }
+  },
+  {
+    "id": "circular_dependency_runtime",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Circular dependency detected|Maximum call stack size exceeded)",
+    "severity": "high",
+    "description": "Circular dependency detected at runtime; may cause unexpected behavior or crash.",
+    "docsKey": "circular_dependency_runtime_error",
+    "meta": {
+      "category": "architecture",
+      "common_causes": ["module A imports B imports A", "dynamic import cycles"],
+      "occurrence_pattern": "runtime during module import"
+    }
+  },
+  {
+    "id": "csrf_token_missing",
+    "languages": ["js", "ts", "python", "java", "go"],
+    "pattern": "(CSRF token missing|invalid CSRF token)",
+    "severity": "high",
+    "description": "Request rejected because CSRF token not present or invalid; security risk if ignored.",
+    "docsKey": "csrf_token_missing_error",
+    "meta": {
+      "category": "security",
+      "common_causes": ["forgot to include token in form/header", "expired session"],
+      "occurrence_pattern": "runtime during HTTP request"
+    }
+  },
+  {
+    "id": "http_429_too_many_requests",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(429 Too Many Requests|Rate limit exceeded)",
+    "severity": "medium",
+    "description": "Client exceeded API rate limit; consider backoff or retry strategy.",
+    "docsKey": "http_429_error",
+    "meta": {
+      "category": "network/api",
+      "common_causes": ["high-frequency requests", "shared API key limit reached"],
+      "occurrence_pattern": "runtime during API call"
+    }
+  },
+  {
+    "id": "proxy_connection_failed",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(ProxyError|cannot connect to proxy|ECONNREFUSED)",
+    "severity": "high",
+    "description": "Failed to connect via proxy; network route blocked or proxy misconfigured.",
+    "docsKey": "proxy_connection_failed_error",
+    "meta": {
+      "category": "network",
+      "common_causes": ["wrong proxy address", "proxy server down", "authentication failed"],
+      "occurrence_pattern": "runtime network request"
+    }
+  },
+  {
+    "id": "certificate_revoked",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(certificate revoked|SSL routines:tls_process_server_certificate)",
+    "severity": "high",
+    "description": "TLS/SSL certificate revoked by CA; must update certificate immediately.",
+    "docsKey": "certificate_revoked_error",
+    "meta": {
+      "category": "security",
+      "common_causes": ["CA revoked certificate", "MITM prevention"],
+      "occurrence_pattern": "network TLS handshake"
+    }
+  },
+  {
+    "id": "connection_reset_by_peer",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(ConnectionResetError|ECONNRESET|connection reset by peer)",
+    "severity": "high",
+    "description": "Remote server closed connection unexpectedly; may indicate network issue or server crash.",
+    "docsKey": "connection_reset_by_peer_error",
+    "meta": {
+      "category": "network",
+      "common_causes": ["server restart", "firewall interruption", "proxy issues"],
+      "occurrence_pattern": "runtime during network connection"
+    }
+  },
+  {
+    "id": "deadlock_db_transaction",
+    "languages": ["python", "go", "java"],
+    "pattern": "(Deadlock found when trying to get lock|database deadlock detected)",
+    "severity": "critical",
+    "description": "Database deadlock detected during transaction; may require retry logic or lock reordering.",
+    "docsKey": "deadlock_db_error",
+    "meta": {
+      "category": "database/concurrency",
+      "common_causes": ["simultaneous conflicting transactions", "long-held locks"],
+      "occurrence_pattern": "runtime DB transaction"
+    }
+  },
+  {
+    "id": "async_unawaited_coroutine",
+    "languages": ["python", "js", "ts"],
+    "pattern": "(RuntimeWarning: coroutine .* was never awaited|unawaited coroutine)",
+    "severity": "high",
+    "description": "Async coroutine created but never awaited; may lead to incomplete execution or resource leaks.",
+    "docsKey": "async_unawaited_coroutine_error",
+    "meta": {
+      "category": "async",
+      "common_causes": ["forgot await", "detached coroutine", "callback mismanagement"],
+      "occurrence_pattern": "runtime async execution"
+    }
+  },
+  {
+    "id": "ssl_protocol_mismatch",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(SSL routines:ssl3_get_record|wrong version number)",
+    "severity": "high",
+    "description": "SSL/TLS protocol mismatch between client and server; connection fails.",
+    "docsKey": "ssl_protocol_mismatch_error",
+    "meta": {
+      "category": "security/network",
+      "common_causes": ["unsupported TLS version", "server config outdated"],
+      "occurrence_pattern": "runtime TLS handshake"
+    }
+  },
+  {
+    "id": "resource_deadlock_detected",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Resource deadlock would occur|deadlock detected)",
+    "severity": "critical",
+    "description": "Deadlock detected between threads/processes; shared resources cannot proceed.",
+    "docsKey": "resource_deadlock_error",
+    "meta": {
+      "category": "concurrency",
+      "common_causes": ["mutex lock cycle", "nested locks", "async and sync conflict"],
+      "occurrence_pattern": "runtime during multithreaded execution"
+    }
+  },
+  {
+    "id": "serialization_failure",
+    "languages": ["python", "js", "ts", "go", "java"],
+    "pattern": "(SerializationError|PicklingError|cannot serialize object)",
+    "severity": "high",
+    "description": "Object serialization failed; may involve unsupported type or circular reference.",
+    "docsKey": "serialization_failure_error",
+    "meta": {
+      "category": "data",
+      "common_causes": ["circular reference", "unsupported object type", "custom serializer missing"],
+      "occurrence_pattern": "runtime during serialization"
+    }
+  },
+  {
+    "id": "timeout_read_write",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(ReadTimeout|WriteTimeout|I/O operation timed out)",
+    "severity": "high",
+    "description": "I/O operation exceeded allowed time; may indicate network slowness, DB lag, or file lock.",
+    "docsKey": "timeout_read_write_error",
+    "meta": {
+      "category": "performance/network",
+      "common_causes": ["slow server", "large payload", "network congestion"],
+      "occurrence_pattern": "runtime during I/O"
+    }
+  },
+  {
+    "id": "unsupported_media_type",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(415 Unsupported Media Type|content type not supported)",
+    "severity": "medium",
+    "description": "HTTP request content-type not supported by server; check headers or API docs.",
+    "docsKey": "unsupported_media_type_error",
+    "meta": {
+      "category": "network",
+      "common_causes": ["wrong content-type", "deprecated endpoint", "server misconfiguration"],
+      "occurrence_pattern": "runtime during HTTP request"
+    }
+  },
+  {
+    "id": "memory_leak_detected",
+    "languages": ["python", "js", "ts", "go", "java", "c", "c++"],
+    "pattern": "(MemoryError|possible memory leak|heap growth without free)",
+    "severity": "critical",
+    "description": "Detected memory leak; process memory usage grows continuously leading to crash or slowdown.",
+    "docsKey": "memory_leak_error",
+    "meta": {
+      "category": "performance/runtime",
+      "common_causes": ["unclosed resources", "circular references", "unreleased handles"],
+      "occurrence_pattern": "runtime during long-running process"
+    }
+  },
+  {
+    "id": "object_finalizer_failed",
+    "languages": ["python", "java", "go", "c#"],
+    "pattern": "(Object finalizer failed|Destructor exception|__del__ failed)",
+    "severity": "medium",
+    "description": "Exception raised during object destruction; may leave resources uncleaned.",
+    "docsKey": "object_finalizer_failed_error",
+    "meta": {
+      "category": "runtime",
+      "common_causes": ["exception in destructor/finalizer", "dependency not released"],
+      "occurrence_pattern": "runtime during garbage collection"
+    }
+  },
+  {
+    "id": "invalid_ssl_certificate_chain",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(SSL certificate chain invalid|unable to verify certificate chain)",
+    "severity": "high",
+    "description": "Server certificate chain incomplete or invalid; may prevent secure connection.",
+    "docsKey": "invalid_ssl_chain_error",
+    "meta": {
+      "category": "security/network",
+      "common_causes": ["intermediate certificate missing", "expired intermediate CA", "man-in-the-middle attack"],
+      "occurrence_pattern": "runtime TLS handshake"
+    }
+  },
+  {
+    "id": "foreign_key_violation",
+    "languages": ["python", "go", "java"],
+    "pattern": "(ForeignKeyConstraintViolation|integrity constraint violation|cannot add or update child row)",
+    "severity": "critical",
+    "description": "Database foreign key constraint violated; indicates relational integrity issue.",
+    "docsKey": "foreign_key_violation_error",
+    "meta": {
+      "category": "database",
+      "common_causes": ["parent record missing", "incorrect relationship mapping", "data migration issue"],
+      "occurrence_pattern": "runtime DB insert/update"
+    }
+  },
+  {
+    "id": "invalid_enum_value",
+    "languages": ["python", "js", "ts", "java", "go"],
+    "pattern": "(InvalidEnumValue|unsupported enum|ValueError: invalid enum)",
+    "severity": "high",
+    "description": "Enum field contains invalid value; check allowed constants or mapping.",
+    "docsKey": "invalid_enum_value_error",
+    "meta": {
+      "category": "data/validation",
+      "common_causes": ["wrong input", "mapping mismatch", "API contract violation"],
+      "occurrence_pattern": "runtime during validation"
+    }
+  },
+  {
+    "id": "deadlock_async_task",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Deadlock detected in async task|Task never completed due to cycle|Async deadlock)",
+    "severity": "critical",
+    "description": "Deadlock between async tasks or promises; execution halted until timeout or manual intervention.",
+    "docsKey": "deadlock_async_task_error",
+    "meta": {
+      "category": "async/concurrency",
+      "common_causes": ["mutual await cycles", "blocked event loop", "unresolved promise dependencies"],
+      "occurrence_pattern": "runtime async execution"
+    }
+  },
+  {
+    "id": "thread_starvation",
+    "languages": ["java", "go", "c#", "python"],
+    "pattern": "(Thread starvation detected|Thread pool exhausted|No available thread)",
+    "severity": "critical",
+    "description": "Threads unable to run due to pool exhaustion; may block processing indefinitely.",
+    "docsKey": "thread_starvation_error",
+    "meta": {
+      "category": "concurrency",
+      "common_causes": ["insufficient pool size", "long-running threads", "deadlocks"],
+      "occurrence_pattern": "runtime thread execution"
+    }
+  },
+  {
+    "id": "tcp_connection_refused",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(ECONNREFUSED|Connection refused|socket error)",
+    "severity": "high",
+    "description": "TCP connection refused by remote host; may indicate service down, firewall, or incorrect port.",
+    "docsKey": "tcp_connection_refused_error",
+    "meta": {
+      "category": "network",
+      "common_causes": ["service not running", "firewall blocking", "wrong port/host"],
+      "occurrence_pattern": "runtime during TCP connection"
+    }
+  },
+  {
+    "id": "http_timeout_gateway",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(504 Gateway Timeout|upstream timeout|server did not respond in time)",
+    "severity": "high",
+    "description": "Server gateway timeout; backend service did not respond within time limit.",
+    "docsKey": "http_504_gateway_timeout_error",
+    "meta": {
+      "category": "network/server",
+      "common_causes": ["backend slow", "network congestion", "load balancer misconfiguration"],
+      "occurrence_pattern": "runtime HTTP request"
+    }
+  },
+  {
+    "id": "database_serialization_failure",
+    "languages": ["python", "go", "java"],
+    "pattern": "(Serialization failure|could not serialize access due to concurrent update)",
+    "severity": "critical",
+    "description": "Database transaction serialization failure due to concurrent modification; retry recommended.",
+    "docsKey": "database_serialization_failure_error",
+    "meta": {
+      "category": "database/concurrency",
+      "common_causes": ["simultaneous writes", "transaction isolation conflicts"],
+      "occurrence_pattern": "runtime DB transaction"
+    }
+  },
+  {
+    "id": "memory_access_violation",
+    "languages": ["c", "c++", "rust", "go"],
+    "pattern": "(Segmentation fault|Invalid memory access|AccessViolationException)",
+    "severity": "critical",
+    "description": "Process attempted invalid memory access; may crash or corrupt data.",
+    "docsKey": "memory_access_violation_error",
+    "meta": {
+      "category": "runtime/memory",
+      "common_causes": ["buffer overflow", "use-after-free", "dangling pointer"],
+      "occurrence_pattern": "runtime memory access"
+    }
+  },
+  {
+    "id": "http_chunked_encoding_error",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(invalid chunked encoding|unexpected end of stream|chunked body parse failed)",
+    "severity": "high",
+    "description": "Failed to parse HTTP chunked transfer; may be truncated response or protocol error.",
+    "docsKey": "http_chunked_encoding_error",
+    "meta": {
+      "category": "network/http",
+      "common_causes": ["malformed response", "proxy interference", "interrupted stream"],
+      "occurrence_pattern": "runtime HTTP response parsing"
+    }
+  },
+  {
+    "id": "tls_downgrade_attack_detected",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(TLS version downgrade detected|insecure protocol fallback)",
+    "severity": "critical",
+    "description": "TLS downgrade attack suspected; server/client negotiated insecure protocol version.",
+    "docsKey": "tls_downgrade_attack_error",
+    "meta": {
+      "category": "security/network",
+      "common_causes": ["MITM attempt", "legacy server protocol support"],
+      "occurrence_pattern": "runtime TLS handshake"
+    }
+  },
+  {
+    "id": "xss_dom_injection_detected",
+    "languages": ["js", "ts"],
+    "pattern": "(DOM-based XSS detected|script injection in DOM|unsafe innerHTML)",
+    "severity": "critical",
+    "description": "Potential XSS via DOM injection detected; user input not sanitized before DOM insertion.",
+    "docsKey": "xss_dom_injection_error",
+    "meta": {
+      "category": "security/frontend",
+      "common_causes": ["innerHTML assignment with user input", "dynamic script insertion"],
+      "occurrence_pattern": "runtime frontend"
+    }
+  },
+  {
+    "id": "http_header_injection",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Header injection detected|CRLF injection|unsafe header value)",
+    "severity": "critical",
+    "description": "Potential HTTP header injection; could allow response splitting or request smuggling.",
+    "docsKey": "http_header_injection_error",
+    "meta": {
+      "category": "security/network",
+      "common_causes": ["unsanitized header input", "dynamic header construction"],
+      "occurrence_pattern": "runtime HTTP response/request"
+    }
+  },
+  {
+    "id": "db_connection_pool_exhausted",
+    "languages": ["python", "go", "java"],
+    "pattern": "(Connection pool exhausted|too many connections|MaxConnectionsExceeded)",
+    "severity": "high",
+    "description": "Database connection pool exhausted; no more connections available for queries.",
+    "docsKey": "db_connection_pool_exhausted_error",
+    "meta": {
+      "category": "database/performance",
+      "common_causes": ["high concurrency", "connections not released", "leaky connections"],
+      "occurrence_pattern": "runtime DB query"
+    }
+  },
+  {
+    "id": "stack_overflow_recursive_async",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Maximum call stack size exceeded|recursive async loop)",
+    "severity": "critical",
+    "description": "Infinite recursion in async or coroutine chain; stack overflow imminent.",
+    "docsKey": "stack_overflow_recursive_async_error",
+    "meta": {
+      "category": "async/runtime",
+      "common_causes": ["self-referential promises", "recursive coroutine calls"],
+      "occurrence_pattern": "runtime async execution"
+    }
+  },
+  {
+    "id": "rate_limit_exceeded_queue",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Rate limit exceeded|QuotaExceededError|429 response)",
+    "severity": "medium",
+    "description": "API or service rate limit exceeded; queued requests delayed or rejected.",
+    "docsKey": "rate_limit_exceeded_error",
+    "meta": {
+      "category": "network/api",
+      "common_causes": ["high request frequency", "shared API key overuse"],
+      "occurrence_pattern": "runtime API calls"
+    }
+  },
+  {
+    "id": "file_descriptor_limit_reached",
+    "languages": ["python", "go", "java", "js", "ts", "c", "c++"],
+    "pattern": "(Too many open files|EMFILE|file descriptor limit exceeded)",
+    "severity": "critical",
+    "description": "OS file descriptor limit reached; I/O operations may fail or crash process.",
+    "docsKey": "file_descriptor_limit_error",
+    "meta": {
+      "category": "performance",
+      "common_causes": ["unclosed files/sockets", "high concurrency without pooling"],
+      "occurrence_pattern": "runtime I/O operations"
+    }
+  },
+  {
+    "id": "deadlock_mutex_cycle",
+    "languages": ["js", "ts", "python", "go", "java", "c#"],
+    "pattern": "(Deadlock detected|Mutex cycle detected|Resource wait cycle)",
+    "severity": "critical",
+    "description": "Deadlock detected via mutex/lock cycle; threads or async tasks blocked indefinitely.",
+    "docsKey": "deadlock_mutex_cycle_error",
+    "meta": {
+      "category": "concurrency",
+      "common_causes": ["nested locks", "async-synchronous lock conflict"],
+      "occurrence_pattern": "runtime multithreaded execution"
+    }
+  },
+  {
+    "id": "deadlock_async_iterator",
+    "languages": ["js", "ts", "python"],
+    "pattern": "(Deadlock detected in async iterator|Async generator blocked indefinitely)",
+    "severity": "critical",
+    "description": "Async iterator blocked due to circular dependency or unawaited coroutine; execution halted.",
+    "docsKey": "deadlock_async_iterator_error",
+    "meta": {
+      "category": "async/concurrency",
+      "common_causes": ["mutual awaits in async generator", "unresolved promise chain"],
+      "occurrence_pattern": "runtime async iteration"
+    }
+  },
+  {
+    "id": "db_unique_constraint_violation",
+    "languages": ["python", "go", "java"],
+    "pattern": "(Unique constraint failed|Duplicate entry for key)",
+    "severity": "high",
+    "description": "Attempted to insert/update duplicate value in unique field; violates DB integrity.",
+    "docsKey": "db_unique_constraint_violation_error",
+    "meta": {
+      "category": "database/integrity",
+      "common_causes": ["duplicate user input", "race condition insert", "missing validation"],
+      "occurrence_pattern": "runtime DB insert/update"
+    }
+  },
+  {
+    "id": "http2_stream_error",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(HTTP/2 stream error|RST_STREAM received|stream closed with error)",
+    "severity": "high",
+    "description": "HTTP/2 stream failed; may indicate protocol error, server misbehavior, or network interruption.",
+    "docsKey": "http2_stream_error",
+    "meta": {
+      "category": "network/http",
+      "common_causes": ["server push mismanagement", "invalid headers", "proxy interference"],
+      "occurrence_pattern": "runtime HTTP/2 request"
+    }
+  },
+  {
+    "id": "tls_handshake_timeout",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(TLS handshake timed out|SSL handshake timeout)",
+    "severity": "high",
+    "description": "TLS handshake did not complete within expected timeframe; possible network latency or server issue.",
+    "docsKey": "tls_handshake_timeout_error",
+    "meta": {
+      "category": "security/network",
+      "common_causes": ["server busy", "firewall blocking", "MITM interference"],
+      "occurrence_pattern": "runtime TLS handshake"
+    }
+  },
+  {
+    "id": "gc_pause_long",
+    "languages": ["java", "go", "python"],
+    "pattern": "(GC pause too long|Stop-the-world GC detected|long garbage collection)",
+    "severity": "medium",
+    "description": "Long garbage collection pause detected; may impact latency-sensitive operations.",
+    "docsKey": "gc_pause_long_error",
+    "meta": {
+      "category": "performance/memory",
+      "common_causes": ["large heap", "frequent allocations", "memory fragmentation"],
+      "occurrence_pattern": "runtime GC"
+    }
+  },
+  {
+    "id": "proxy_authentication_failed",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Proxy authentication required|407 Proxy Authentication Required)",
+    "severity": "high",
+    "description": "Proxy rejected connection due to failed authentication; check credentials.",
+    "docsKey": "proxy_auth_failed_error",
+    "meta": {
+      "category": "network/security",
+      "common_causes": ["wrong proxy username/password", "expired token", "network config"],
+      "occurrence_pattern": "runtime network request"
+    }
+  },
+  {
+    "id": "ssl_expired_certificate",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(certificate has expired|SSL routines:certificate verify failed)",
+    "severity": "high",
+    "description": "SSL certificate expired; secure connection cannot be established.",
+    "docsKey": "ssl_expired_cert_error",
+    "meta": {
+      "category": "security/network",
+      "common_causes": ["expired certificate", "system date incorrect", "MITM attempt"],
+      "occurrence_pattern": "runtime TLS handshake"
+    }
+  },
+  {
+    "id": "nested_promise_rejection",
+    "languages": ["js", "ts"],
+    "pattern": "(UnhandledPromiseRejection|promise rejected without catch)",
+    "severity": "high",
+    "description": "Nested promise rejected without handler; may terminate Node.js process in future versions.",
+    "docsKey": "nested_promise_rejection_error",
+    "meta": {
+      "category": "async/runtime",
+      "common_causes": ["forgot catch()", "async recursion", "chained rejection"],
+      "occurrence_pattern": "runtime async execution"
+    }
+  },
+  {
+    "id": "sql_syntax_error_complex",
+    "languages": ["python", "go", "java"],
+    "pattern": "(syntax error at or near|SQLSyntaxErrorException|unterminated statement)",
+    "severity": "high",
+    "description": "Complex SQL syntax error; may involve nested queries, CTEs, or function calls.",
+    "docsKey": "sql_syntax_error_complex",
+    "meta": {
+      "category": "database",
+      "common_causes": ["typo in query", "invalid subquery", "unsupported function"],
+      "occurrence_pattern": "runtime DB execution"
+    }
+  },
+  {
+    "id": "memory_leak_cyclic_reference",
+    "languages": ["python", "js", "ts", "java", "go"],
+    "pattern": "(Possible memory leak detected|object cycle not collected|heap growth without free)",
+    "severity": "critical",
+    "description": "Memory leak due to cyclic references not collected by GC; may cause process crash.",
+    "docsKey": "memory_leak_cyclic_error",
+    "meta": {
+      "category": "performance/memory",
+      "common_causes": ["mutual references in objects", "GC unable to detect cycle"],
+      "occurrence_pattern": "runtime memory management"
+    }
+  },
+  {
+    "id": "filesystem_permission_denied",
+    "languages": ["python", "js", "ts", "go", "java", "c", "c++"],
+    "pattern": "(Permission denied|EACCES|cannot open file)",
+    "severity": "high",
+    "description": "Process lacks permission to read/write file or directory.",
+    "docsKey": "filesystem_permission_denied_error",
+    "meta": {
+      "category": "system",
+      "common_causes": ["OS permissions", "file locked by another process", "readonly filesystem"],
+      "occurrence_pattern": "runtime filesystem operation"
+    }
+  },
+  {
+    "id": "http2_header_compression_error",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(HPACK decoding failure|HTTP/2 header decompression error)",
+    "severity": "medium",
+    "description": "Error decompressing HTTP/2 headers; may indicate malformed response or implementation bug.",
+    "docsKey": "http2_header_compression_error",
+    "meta": {
+      "category": "network/http",
+      "common_causes": ["malformed headers", "protocol bug", "proxy interference"],
+      "occurrence_pattern": "runtime HTTP/2 response parsing"
+    }
+  },
+  {
+    "id": "async_event_emitter_overflow",
+    "languages": ["js", "ts", "python"],
+    "pattern": "(MaxListenersExceededWarning|EventEmitter memory leak detected)",
+    "severity": "medium",
+    "description": "Too many listeners attached to async event emitter; may cause memory leaks.",
+    "docsKey": "async_event_emitter_overflow_error",
+    "meta": {
+      "category": "async/performance",
+      "common_causes": ["forgot removeListener", "high-frequency event emit", "uncontrolled recursion"],
+      "occurrence_pattern": "runtime async execution"
+    }
+  },
+  {
+    "id": "kernel_signal_crash",
+    "languages": ["c", "c++", "rust", "go"],
+    "pattern": "(Segmentation fault|SIGSEGV|illegal instruction)",
+    "severity": "critical",
+    "description": "Process received fatal signal; invalid memory access or illegal CPU instruction.",
+    "docsKey": "kernel_signal_crash_error",
+    "meta": {
+      "category": "system/hardware",
+      "common_causes": ["buffer overflow", "dangling pointer", "unsafe assembly"],
+      "occurrence_pattern": "runtime OS-level signal"
+    }
+  },
+  {
+    "id": "nested_deadlock_db",
+    "languages": ["python", "go", "java"],
+    "pattern": "(Deadlock detected in nested transaction|transaction lock wait timeout)",
+    "severity": "critical",
+    "description": "Nested database transactions caused multi-level deadlock; manual intervention or retry needed.",
+    "docsKey": "nested_deadlock_db_error",
+    "meta": {
+      "category": "database/concurrency",
+      "common_causes": ["multi-table locks", "long-running transaction", "circular transaction dependency"],
+      "occurrence_pattern": "runtime DB transaction"
+    }
+  },
+  {
+    "id": "async_task_timeout_chain",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Async task timed out|Promise never resolved|Coroutine timeout)",
+    "severity": "high",
+    "description": "Async chain task exceeded allowed execution time; may indicate blocked event loop or resource contention.",
+    "docsKey": "async_task_timeout_chain_error",
+    "meta": {
+      "category": "async/runtime",
+      "common_causes": ["blocked event loop", "unresolved promises", "network latency"],
+      "occurrence_pattern": "runtime async execution"
+    }
+  },
+  {
+    "id": "db_replication_lag",
+    "languages": ["python", "go", "java"],
+    "pattern": "(Replication lag exceeds threshold|Slave not caught up|Stale data detected)",
+    "severity": "medium",
+    "description": "Database replication lag detected; reads may return stale data.",
+    "docsKey": "db_replication_lag_error",
+    "meta": {
+      "category": "database/performance",
+      "common_causes": ["high write volume", "network latency", "replica lag"],
+      "occurrence_pattern": "runtime DB replication"
+    }
+  },
+  {
+    "id": "http3_transport_error",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(QUIC transport error|HTTP/3 frame error|stream closed prematurely)",
+    "severity": "high",
+    "description": "HTTP/3 transport layer error; stream aborted or protocol violation detected.",
+    "docsKey": "http3_transport_error",
+    "meta": {
+      "category": "network/http",
+      "common_causes": ["malformed frame", "proxy interference", "network congestion"],
+      "occurrence_pattern": "runtime HTTP/3 request"
+    }
+  },
+  {
+    "id": "gc_finalizer_exception",
+    "languages": ["java", "python", "go"],
+    "pattern": "(Exception in finalizer|Error during object finalization|__del__ exception)",
+    "severity": "medium",
+    "description": "Exception raised during garbage collection finalization; resources may remain unfreed.",
+    "docsKey": "gc_finalizer_exception_error",
+    "meta": {
+      "category": "performance/memory",
+      "common_causes": ["unhandled exception in destructor", "dependency cleanup failed"],
+      "occurrence_pattern": "runtime GC"
+    }
+  },
+  {
+    "id": "segfault_stack_overflow",
+    "languages": ["c", "c++", "rust", "go"],
+    "pattern": "(Stack overflow|Segmentation fault due to recursion)",
+    "severity": "critical",
+    "description": "Stack overflow from deep or infinite recursion; may cause segmentation fault.",
+    "docsKey": "segfault_stack_overflow_error",
+    "meta": {
+      "category": "runtime/memory",
+      "common_causes": ["infinite recursion", "unbounded nested function calls"],
+      "occurrence_pattern": "runtime execution"
+    }
+  },
+  {
+    "id": "xss_multi_stage_dom",
+    "languages": ["js", "ts"],
+    "pattern": "(DOM XSS detected|Unsafe eval or innerHTML chain)",
+    "severity": "critical",
+    "description": "Multi-stage DOM XSS injection detected; user input reaches DOM via chained assignments or eval.",
+    "docsKey": "xss_multi_stage_dom_error",
+    "meta": {
+      "category": "security/frontend",
+      "common_causes": ["innerHTML with eval", "multiple DOM assignments with user input"],
+      "occurrence_pattern": "runtime frontend"
+    }
+  },
+  {
+    "id": "csrf_multi_step",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(CSRF token missing in multi-step form|invalid CSRF token detected)",
+    "severity": "high",
+    "description": "Multi-step form request rejected due to missing or invalid CSRF token; security risk if bypassed.",
+    "docsKey": "csrf_multi_step_error",
+    "meta": {
+      "category": "security",
+      "common_causes": ["forgot token in intermediate step", "session expired", "form replay attack"],
+      "occurrence_pattern": "runtime HTTP request"
+    }
+  },
+  {
+    "id": "tls_renegotiation_fail",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(TLS renegotiation failed|SSL routines:ssl3_get_server_certificate)",
+    "severity": "high",
+    "description": "TLS renegotiation failed; may indicate server misconfiguration or MITM attempt.",
+    "docsKey": "tls_renegotiation_fail_error",
+    "meta": {
+      "category": "security/network",
+      "common_causes": ["server does not support renegotiation", "MITM attack", "protocol mismatch"],
+      "occurrence_pattern": "runtime TLS handshake"
+    }
+  },
+  {
+    "id": "enum_version_mismatch",
+    "languages": ["js", "ts", "python", "java", "go"],
+    "pattern": "(Invalid enum value|EnumVersionMismatch|unsupported enum constant)",
+    "severity": "high",
+    "description": "Enum value mismatch between client and server/library version; may break logic.",
+    "docsKey": "enum_version_mismatch_error",
+    "meta": {
+      "category": "data/validation",
+      "common_causes": ["version upgrade mismatch", "deprecated enum constants", "API contract violation"],
+      "occurrence_pattern": "runtime validation"
+    }
+  },
+  {
+    "id": "filesystem_path_too_long",
+    "languages": ["python", "js", "ts", "go", "java", "c", "c++"],
+    "pattern": "(File name too long|ENAMETOOLONG|path exceeds maximum length)",
+    "severity": "medium",
+    "description": "Filesystem path exceeds OS max length; operation fails.",
+    "docsKey": "filesystem_path_too_long_error",
+    "meta": {
+      "category": "system",
+      "common_causes": ["deep folder nesting", "long autogenerated filenames"],
+      "occurrence_pattern": "runtime filesystem operation"
+    }
+  },
+  {
+    "id": "http_redirect_loop",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Too many redirects|Redirect loop detected)",
+    "severity": "medium",
+    "description": "HTTP redirect loop detected; request did not reach final destination.",
+    "docsKey": "http_redirect_loop_error",
+    "meta": {
+      "category": "network/http",
+      "common_causes": ["misconfigured server redirects", "circular URL mappings", "proxy loop"],
+      "occurrence_pattern": "runtime HTTP request"
+    }
+  },
+  {
+    "id": "async_task_cancellation_leak",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Task was cancelled but resources not freed|Unhandled cancellation exception|leaked async handle)",
+    "severity": "critical",
+    "description": "Async task cancelled but resources not cleaned; may cause memory leak or deadlock.",
+    "docsKey": "async_task_cancellation_leak_error",
+    "meta": {
+      "category": "async/memory",
+      "common_causes": ["forgot finally cleanup", "unawaited task", "resource handle not released"],
+      "occurrence_pattern": "runtime async execution"
+    }
+  },
+  {
+    "id": "db_phantom_read",
+    "languages": ["python", "go", "java"],
+    "pattern": "(Phantom read detected|Serializable isolation violation)",
+    "severity": "high",
+    "description": "Phantom read occurred in transaction; data read multiple times yields different rows.",
+    "docsKey": "db_phantom_read_error",
+    "meta": {
+      "category": "database/concurrency",
+      "common_causes": ["read-committed isolation in concurrent insert/update", "missing locks"],
+      "occurrence_pattern": "runtime DB transaction"
+    }
+  },
+  {
+    "id": "tls_fallback_downgrade",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(TLS fallback detected|Insecure protocol negotiated|SSL version downgraded)",
+    "severity": "critical",
+    "description": "TLS downgraded to insecure version; may indicate MITM attack or server misconfiguration.",
+    "docsKey": "tls_fallback_downgrade_error",
+    "meta": {
+      "category": "security/network",
+      "common_causes": ["legacy server support", "protocol downgrade attack", "client misconfiguration"],
+      "occurrence_pattern": "runtime TLS handshake"
+    }
+  },
+  {
+    "id": "gc_object_resurrection",
+    "languages": ["python", "java", "go"],
+    "pattern": "(Object resurrected during finalization|__del__ resurrected|GC object still referenced)",
+    "severity": "high",
+    "description": "Object resurrected during garbage collection; may prevent memory reclamation and cause leaks.",
+    "docsKey": "gc_object_resurrection_error",
+    "meta": {
+      "category": "performance/memory",
+      "common_causes": ["__del__ assigns self to global variable", "finalizer creates reference to itself"],
+      "occurrence_pattern": "runtime GC"
+    }
+  },
+  {
+    "id": "http3_malformed_frame",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(HTTP/3 frame error|QUIC malformed frame|Stream aborted due to frame error)",
+    "severity": "high",
+    "description": "Malformed HTTP/3 frame received; may indicate protocol bug, proxy corruption, or MITM.",
+    "docsKey": "http3_malformed_frame_error",
+    "meta": {
+      "category": "network/http",
+      "common_causes": ["broken QUIC implementation", "proxy interference", "network corruption"],
+      "occurrence_pattern": "runtime HTTP/3 request"
+    }
+  },
+  {
+    "id": "jwt_signature_fail",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(JWT signature verification failed|Invalid JWT signature|Token tampered)",
+    "severity": "critical",
+    "description": "JWT token signature invalid; authentication or authorization may be compromised.",
+    "docsKey": "jwt_signature_fail_error",
+    "meta": {
+      "category": "security/auth",
+      "common_causes": ["tampered token", "wrong secret/key", "algorithm mismatch"],
+      "occurrence_pattern": "runtime authentication"
+    }
+  },
+  {
+    "id": "oauth_refresh_token_fail",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(OAuth2 refresh token expired|Invalid refresh token|Unable to refresh access token)",
+    "severity": "high",
+    "description": "OAuth2 refresh token invalid or expired; re-authentication required.",
+    "docsKey": "oauth_refresh_token_fail_error",
+    "meta": {
+      "category": "security/auth",
+      "common_causes": ["expired token", "revoked token", "client misconfiguration"],
+      "occurrence_pattern": "runtime authentication"
+    }
+  },
+  {
+    "id": "circular_import_detected",
+    "languages": ["python", "js", "ts", "go", "java"],
+    "pattern": "(Circular import detected|Module dependency cycle|ImportError due to cycle)",
+    "severity": "high",
+    "description": "Circular dependency detected between modules; may cause import errors or runtime crash.",
+    "docsKey": "circular_import_detected_error",
+    "meta": {
+      "category": "compile/runtime",
+      "common_causes": ["mutual imports", "improper module structuring", "dynamic import in cycles"],
+      "occurrence_pattern": "compile-time or runtime module load"
+    }
+  },
+  {
+    "id": "db_write_skew",
+    "languages": ["python", "go", "java"],
+    "pattern": "(Write skew detected|Serializable anomaly detected|Concurrent update conflict)",
+    "severity": "critical",
+    "description": "Database write skew anomaly detected; transaction updates violate serializability.",
+    "docsKey": "db_write_skew_error",
+    "meta": {
+      "category": "database/concurrency",
+      "common_causes": ["high isolation anomaly", "concurrent insert/update", "distributed DB conflicts"],
+      "occurrence_pattern": "runtime DB transaction"
+    }
+  },
+  {
+    "id": "stack_overflow_chained_recursive",
+    "languages": ["js", "ts", "python", "go", "java", "c", "c++"],
+    "pattern": "(Maximum call stack size exceeded|Recursive call chain overflow|Infinite recursion detected)",
+    "severity": "critical",
+    "description": "Stack overflow caused by deeply nested or infinite recursion; may crash process.",
+    "docsKey": "stack_overflow_chained_recursive_error",
+    "meta": {
+      "category": "runtime/memory",
+      "common_causes": ["recursive function without base case", "mutual recursion cycles"],
+      "occurrence_pattern": "runtime execution"
+    }
+  },
+  {
+    "id": "sql_nested_sqli_attempt",
+    "languages": ["python", "go", "java"],
+    "pattern": "(SQL injection detected|Nested query manipulation|Potential SQLi payload)",
+    "severity": "critical",
+    "description": "Nested SQL injection attempt detected; input contains malicious payload targeting query chain.",
+    "docsKey": "sql_nested_sqli_attempt_error",
+    "meta": {
+      "category": "security/database",
+      "common_causes": ["unsanitized nested inputs", "dynamic SQL concatenation", "user input in subquery"],
+      "occurrence_pattern": "runtime DB query"
+    }
+  },
+  {
+    "id": "kernel_panic_nested",
+    "languages": ["c", "c++", "rust", "go"],
+    "pattern": "(Kernel panic - not syncing|Double fault|Nested panic detected)",
+    "severity": "critical",
+    "description": "Kernel panic triggered by nested fault; system unstable and requires reboot.",
+    "docsKey": "kernel_panic_nested_error",
+    "meta": {
+      "category": "system/hardware",
+      "common_causes": ["null pointer dereference in kernel module", "stack corruption", "recursive panic in handler"],
+      "occurrence_pattern": "runtime OS-level"
+    }
+  },
+  {
+    "id": "async_starvation_threadpool",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Thread pool starvation detected|Async tasks pending indefinitely|Deadlocked futures)",
+    "severity": "critical",
+    "description": "Thread pool exhausted and async tasks cannot progress; potential process hang.",
+    "docsKey": "async_starvation_threadpool_error",
+    "meta": {
+      "category": "async/concurrency",
+      "common_causes": ["long-running blocking tasks", "improper await/async usage", "task queue overflow"],
+      "occurrence_pattern": "runtime async execution"
+    }
+  },
+  {
+    "id": "db_quorum_fail",
+    "languages": ["python", "go", "java"],
+    "pattern": "(Quorum not reached|Replica nodes unavailable|Distributed transaction failed)",
+    "severity": "critical",
+    "description": "Distributed DB failed to reach quorum; write/read operation may be lost or inconsistent.",
+    "docsKey": "db_quorum_fail_error",
+    "meta": {
+      "category": "database/distributed",
+      "common_causes": ["node down", "network partition", "replication lag"],
+      "occurrence_pattern": "runtime DB transaction"
+    }
+  },
+  {
+    "id": "http_redirect_storm",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Too many redirects|Redirect storm detected|Infinite HTTP redirect chain)",
+    "severity": "high",
+    "description": "HTTP redirect loop exceeded threshold; request never resolves.",
+    "docsKey": "http_redirect_storm_error",
+    "meta": {
+      "category": "network/http",
+      "common_causes": ["misconfigured server redirects", "circular URL mapping", "proxy loops"],
+      "occurrence_pattern": "runtime HTTP request"
+    }
+  },
+  {
+    "id": "memory_heap_fragmentation",
+    "languages": ["js", "ts", "python", "go", "java", "c", "c++"],
+    "pattern": "(Heap fragmentation detected|Unable to allocate contiguous memory|Memory pool exhausted)",
+    "severity": "critical",
+    "description": "Severe memory fragmentation; allocation requests fail or crash process.",
+    "docsKey": "memory_heap_fragmentation_error",
+    "meta": {
+      "category": "performance/memory",
+      "common_causes": ["frequent large object allocation", "fragmented heap", "GC inefficiency"],
+      "occurrence_pattern": "runtime memory management"
+    }
+  },
+  {
+    "id": "csp_multi_violation",
+    "languages": ["js", "ts"],
+    "pattern": "(Content Security Policy violation|Multiple CSP directives violated)",
+    "severity": "high",
+    "description": "Multiple CSP violations detected in page; security policy enforcement triggered.",
+    "docsKey": "csp_multi_violation_error",
+    "meta": {
+      "category": "security/frontend",
+      "common_causes": ["unsafe inline scripts", "multiple eval() usage", "injected content"],
+      "occurrence_pattern": "runtime frontend"
+    }
+  },
+  {
+    "id": "jwt_replay_attack",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(JWT token replay detected|Duplicate token usage|Token reuse not allowed)",
+    "severity": "critical",
+    "description": "JWT token reused maliciously; possible replay attack.",
+    "docsKey": "jwt_replay_attack_error",
+    "meta": {
+      "category": "security/auth",
+      "common_causes": ["token intercepted", "malicious client", "session hijacking"],
+      "occurrence_pattern": "runtime authentication"
+    }
+  },
+  {
+    "id": "stack_overflow_mutual_recursion",
+    "languages": ["js", "ts", "python", "go", "java", "c", "c++"],
+    "pattern": "(Maximum call stack size exceeded|Mutual recursion detected|Stack overflow chained functions)",
+    "severity": "critical",
+    "description": "Mutual recursion between functions caused stack overflow; process may crash.",
+    "docsKey": "stack_overflow_mutual_recursion_error",
+    "meta": {
+      "category": "runtime/memory",
+      "common_causes": ["function A calls B and B calls A repeatedly", "infinite recursive chain"],
+      "occurrence_pattern": "runtime execution"
+    }
+  },
+  {
+    "id": "sql_nested_sqli_chain",
+    "languages": ["python", "go", "java"],
+    "pattern": "(SQL injection nested query detected|Chained SQLi payload|Dynamic subquery manipulation)",
+    "severity": "critical",
+    "description": "Chained nested SQL injection detected; input crafted to exploit multi-layer query logic.",
+    "docsKey": "sql_nested_sqli_chain_error",
+    "meta": {
+      "category": "security/database",
+      "common_causes": ["unsanitized nested inputs", "dynamic SQL concatenation", "subquery injection"],
+      "occurrence_pattern": "runtime DB query"
+    }
+  },
+  {
+    "id": "oauth2_multi_step_fail",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(OAuth2 multi-step authorization failed|Invalid intermediate token|Authorization code reuse)",
+    "severity": "high",
+    "description": "OAuth2 multi-step flow failed; intermediate token invalid or expired.",
+    "docsKey": "oauth2_multi_step_fail_error",
+    "meta": {
+      "category": "security/auth",
+      "common_causes": ["expired intermediate code", "invalid redirect_uri", "token replay"],
+      "occurrence_pattern": "runtime authentication"
+    }
+  },
+  {
+    "id": "kernel_stack_corruption",
+    "languages": ["c", "c++", "rust", "go"],
+    "pattern": "(Stack corruption detected|Kernel stack overflow|Invalid stack pointer)",
+    "severity": "critical",
+    "description": "Kernel-level stack corruption detected; process or system may crash immediately.",
+    "docsKey": "kernel_stack_corruption_error",
+    "meta": {
+      "category": "system/hardware",
+      "common_causes": ["buffer overflow in kernel module", "recursive interrupt handler", "invalid pointer arithmetic"],
+      "occurrence_pattern": "runtime OS/kernel"
+    }
+  },
+  {
+    "id": "async_unhandled_task_cascade",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(Unhandled async task exception cascade|Pending tasks blocked indefinitely|Promise chain rejected without catch)",
+    "severity": "critical",
+    "description": "Multiple async tasks failed without handler; may cause process crash or deadlock.",
+    "docsKey": "async_unhandled_task_cascade_error",
+    "meta": {
+      "category": "async/concurrency",
+      "common_causes": ["forgot catch/finally", "unawaited coroutine", "nested async loops"],
+      "occurrence_pattern": "runtime async execution"
+    }
+  },
+  {
+    "id": "db_cascading_fk_violation",
+    "languages": ["python", "go", "java"],
+    "pattern": "(Foreign key constraint fails|Cascading FK violation|Referential integrity error)",
+    "severity": "critical",
+    "description": "Cascading foreign key violation; multiple tables affected due to dependent delete/update.",
+    "docsKey": "db_cascading_fk_violation_error",
+    "meta": {
+      "category": "database/integrity",
+      "common_causes": ["orphaned child records", "multi-table delete/update", "transaction rollback"],
+      "occurrence_pattern": "runtime DB operation"
+    }
+  },
+  {
+    "id": "http3_frame_storm",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(HTTP/3 frame storm detected|QUIC frame buffer overflow|Stream aborted multiple times)",
+    "severity": "critical",
+    "description": "High-frequency malformed HTTP/3 frames detected; connection may reset repeatedly.",
+    "docsKey": "http3_frame_storm_error",
+    "meta": {
+      "category": "network/http",
+      "common_causes": ["broken QUIC implementation", "proxy interference", "malicious client/server"],
+      "occurrence_pattern": "runtime HTTP/3 session"
+    }
+  },
+  {
+    "id": "gc_stop_the_world_spike",
+    "languages": ["java", "python", "go"],
+    "pattern": "(Stop-the-world GC spike|Long GC pause|Heap collection delay)",
+    "severity": "high",
+    "description": "GC stop-the-world pause exceeds threshold; may impact latency-sensitive operations.",
+    "docsKey": "gc_stop_the_world_spike_error",
+    "meta": {
+      "category": "performance/memory",
+      "common_causes": ["large heap", "high allocation rate", "fragmented memory"],
+      "occurrence_pattern": "runtime GC"
+    }
+  },
+  {
+    "id": "multi_stage_xss_chain",
+    "languages": ["js", "ts"],
+    "pattern": "(DOM XSS multi-stage detected|Unsafe input propagated across multiple nodes)",
+    "severity": "critical",
+    "description": "User input traversed multiple stages to DOM unsanitized; potential remote code execution in browser.",
+    "docsKey": "multi_stage_xss_chain_error",
+    "meta": {
+      "category": "security/frontend",
+      "common_causes": ["innerHTML with chained eval", "script injection in multiple DOM nodes"],
+      "occurrence_pattern": "runtime frontend"
+    }
+  },
+  {
+    "id": "jwt_token_replay_detected",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(JWT token replay detected|Duplicate JWT usage|Replay attack suspected)",
+    "severity": "critical",
+    "description": "Detected repeated usage of JWT token; possible replay attack.",
+    "docsKey": "jwt_token_replay_detected_error",
+    "meta": {
+      "category": "security/auth",
+      "common_causes": ["intercepted token", "malicious client", "session hijacking"],
+      "occurrence_pattern": "runtime authentication"
+    }
+  },
+  {
+    "id": "oauth2_refresh_chain_fail",
+    "languages": ["js", "ts", "python", "go", "java"],
+    "pattern": "(OAuth2 chained refresh token failed|Intermediate token expired|Authorization code reused)",
+    "severity": "high",
+    "description": "Chained OAuth2 token refresh failed; multi-step flow interrupted.",
+    "docsKey": "oauth2_refresh_chain_fail_error",
+    "meta": {
+      "category": "security/auth",
+      "common_causes": ["expired intermediate token", "replay attack", "redirect mismatch"],
+      "occurrence_pattern": "runtime authentication"
+    }
+  },
+  {
+    "id": "circular_import_tree_detected",
+    "languages": ["python", "js", "ts", "go", "java"],
+    "pattern": "(Circular import tree detected|Module dependency cycle found|ImportError chain)",
+    "severity": "high",
+    "description": "Circular import in multi-module dependency tree; may cause runtime failure or stack overflow.",
+    "docsKey": "circular_import_tree_detected_error",
+    "meta": {
+      "category": "compile/runtime",
+      "common_causes": ["mutual imports across modules", "dynamic import cycles", "improper package structuring"],
+      "occurrence_pattern": "compile/runtime"
+    }
+  },
+  {
+    "id": "enum_flag_mismatch_chained",
+    "languages": ["js", "ts", "python", "java", "go"],
+    "pattern": "(Enum/Flag mismatch detected|Unsupported enum combination|Versioned enum inconsistency)",
+    "severity": "high",
+    "description": "Enum or flag mismatch across multiple layers; may break logic in chained calls.",
+    "docsKey": "enum_flag_mismatch_chained_error",
+    "meta": {
+      "category": "data/validation",
+      "common_causes": ["version mismatch", "deprecated constants", "multi-layer API contract violation"],
+      "occurrence_pattern": "runtime validation"
+    }
+  },
+  {
+    "id": "sql_nested_sqli_multi",
+    "languages": ["python", "go", "java"],
+    "pattern": "(Nested SQL injection detected|Multi-layer SQLi payload|Chained query manipulation)",
+    "severity": "critical",
+    "description": "Nested SQLi across multiple queries detected; high risk for DB compromise.",
+    "docsKey": "sql_nested_sqli_multi_error",
+    "meta": {
+      "category": "security/database",
+      "common_causes": ["dynamic SQL concatenation", "multi-layer unsanitized input", "complex nested queries"],
+      "occurrence_pattern": "runtime DB query"
+    }
+  }
+]

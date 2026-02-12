@@ -1,0 +1,44 @@
+{
+  "name": "stackly",
+  "version": "0.1.0",
+  "description": "Terminal-powered stack trace analyzer & smart fixer",
+  "main": "bin/stackly.js",
+  "bin": {
+    "stackly": "bin/stackly.js"
+  },
+  "scripts": {
+    "start": "node bin/stackly.js",
+    "analyze": "node bin/stackly.js analyze",
+    "watch": "node bin/stackly.js watch",
+    "report": "node bin/stackly.js report"
+  },
+  "keywords": [
+    "stacktrace",
+    "error",
+    "cli",
+    "debug",
+    "analyzer",
+    "fix",
+    "developer-tools",
+    "log",
+    "recurring-error"
+  ],
+  "homepage": "https://github.com/alberttsegl/stackly#readme",
+  "bugs": {
+    "url": "https://github.com/alberttsegl/stackly/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alberttsegl/stackly.git"
+  },
+  "author": "Albert Septian Gulo",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^6.0.0",
+    "commander": "^11.0.0",
+    "fs-extra": "^11.1.1",
+    "ora": "^8.1.1",
+    "regex": "^0.2.0",
+    "axios": "^1.6.0"
+  }
+}
